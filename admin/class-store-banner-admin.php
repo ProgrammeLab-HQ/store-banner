@@ -75,6 +75,10 @@ class Store_Banner_Admin
 		 * class.
 		 */
 
+
+		wp_enqueue_style($this->plugin_name . '-grid', plugin_dir_url(__FILE__) . 'css/grid.css', array(), $this->version, 'all');
+		wp_enqueue_style($this->plugin_name . '-utilities', plugin_dir_url(__FILE__) . 'css/utilities.css', array(), $this->version, 'all');
+
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/store-banner-admin.css', array(), $this->version, 'all');
 	}
 
@@ -234,7 +238,7 @@ class Store_Banner_Admin
 			esc_html__('Settings', 'store-banner'),
 			'manage_options',
 			$this->plugin_name . '-settings',
-			array($this, 'store_banner_dashboard_page_html')
+			array($this, 'store_banner_settings_page_html')
 		);
 	}
 
@@ -249,6 +253,19 @@ class Store_Banner_Admin
 			return;
 		}
 		include_once('partials/' . $this->plugin_name . '-admin-display.php');
+	}
+
+	/**
+	 * Loading plugin Welcome page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function store_banner_settings_page_html()
+	{
+		if (!current_user_can('manage_options')) {
+			return;
+		}
+		include_once('partials/' . $this->plugin_name . '-admin-display-settings.php');
 	}
 
 	/**
