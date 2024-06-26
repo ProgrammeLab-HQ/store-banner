@@ -20,6 +20,9 @@ $dark_blue_color: #002e73;
   .text-dark-blue {
     color: $dark_blue_color;
   }
+  a {
+    box-shadow: none;
+  }
   .button {
     background-color: transparent;
     color: #757575;
@@ -308,10 +311,10 @@ $dark_blue_color: #002e73;
                   ul {
                     li {
                       a {
-                        &.settings-link {
+                        border-radius: 4px;
+                        padding: 10px 24px;
+                        &.active {
                           background-color: #e6f0ff33;
-                          border-radius: 4px;
-                          padding: 10px 24px;
                         }
                       }
                     }
