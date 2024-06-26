@@ -174,6 +174,8 @@ class Store_Banner
 			$this->loader->add_filter('admin_body_class', $plugin_admin, 'store_banner_admin_body_class');
 
 			$this->loader->add_action('admin_init', $plugin_admin, 'store_banner_do_activation_redirect');
+			//add_action('current_screen', 'store_banner_hide_admin_notices');
+			$this->loader->add_action('current_screen', $plugin_admin, 'store_banner_hide_admin_notices');
 		}
 	}
 

@@ -102,7 +102,32 @@ class Store_Banner_Admin
 		 * class.
 		 */
 
+
+
+		global $screen_id_options;
+		// var_dump($screen_id_options);
+		if ($screen_id_options == 'toplevel_page_react-settings-page-options') {
+
+			$plugin_url  = plugin_dir_url(__DIR__);
+			wp_enqueue_script(
+				'react-store-banner',
+				$plugin_url . '/build/index.js',
+				array('wp-element', 'wp-api-fetch', 'wp-i18n'),
+				'1.00',
+				true
+			);
+		}
+
+
+
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/store-banner-admin.js', array('jquery'), $this->version, false);
+
+		$ajax_params = array(
+			'admin_url' => admin_url(),
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'security' => esc_attr(wp_create_nonce('store_banner_page_security_nonce')),
+		);
+		wp_localize_script($this->plugin_name, 'store_banner_page_ajax_obj', $ajax_params);
 	}
 
 	/**
@@ -223,7 +248,6 @@ class Store_Banner_Admin
 			plugin_dir_url(__DIR__) . 'admin/images/menu-icon.svg',
 			57
 		);
-
 		add_submenu_page(
 			$this->plugin_name,
 			esc_html__('Welcome', 'store-banner'),
@@ -237,8 +261,8 @@ class Store_Banner_Admin
 			esc_html__('Settings', 'store-banner'),
 			esc_html__('Settings', 'store-banner'),
 			'manage_options',
-			$this->plugin_name . '-settings',
-			array($this, 'store_banner_settings_page_html')
+			$this->plugin_name . '&path=settings',
+			array($this, 'store_banner_dashboard_page_html')
 		);
 	}
 
@@ -252,19 +276,7 @@ class Store_Banner_Admin
 		if (!current_user_can('manage_options')) {
 			return;
 		}
-		include_once('partials/' . $this->plugin_name . '-admin-display.php');
-	}
-
-	/**
-	 * Loading plugin Welcome page.
-	 *
-	 * @since    1.0.0
-	 */
-	public function store_banner_settings_page_html()
-	{
-		if (!current_user_can('manage_options')) {
-			return;
-		}
+		// include_once('partials/' . $this->plugin_name . '-admin-display-settings.php');
 		include_once('partials/' . $this->plugin_name . '-admin-display-settings.php');
 	}
 
@@ -325,6 +337,20 @@ class Store_Banner_Admin
 		if (get_option('store_banner_do_activation_redirect')) {
 			delete_option('store_banner_do_activation_redirect');
 			wp_safe_redirect(admin_url('admin.php?page=' . $this->plugin_name));
+		}
+	}
+
+	/**
+	 * Removing all notieces from settings page.
+	 *
+	 * @since    1.0.0
+	 */
+	public function store_banner_hide_admin_notices()
+	{
+		$current_screen = get_current_screen();
+		if ($current_screen->base == 'toplevel_page_store-banner') {
+			remove_all_actions('user_admin_notices');
+			remove_all_actions('admin_notices');
 		}
 	}
 }

@@ -18,6 +18,9 @@
 .store-banner-settings-template .text-dark-blue {
   color: #002e73;
 }
+.store-banner-settings-template a {
+  box-shadow: none;
+}
 .store-banner-settings-template .button {
   background-color: transparent;
   color: #757575;
@@ -272,10 +275,12 @@
   padding-left: 20px;
   margin-left: 20px;
 }
-.store-banner-settings-template #wpwrap #wpcontent #wpbody #wpbody-content .store-banner-settings-wrapper .store-banner-settings-container .header-part .left-header ul li a.settings-link {
-  background-color: rgba(230, 240, 255, 0.2);
+.store-banner-settings-template #wpwrap #wpcontent #wpbody #wpbody-content .store-banner-settings-wrapper .store-banner-settings-container .header-part .left-header ul li a {
   border-radius: 4px;
   padding: 10px 24px;
+}
+.store-banner-settings-template #wpwrap #wpcontent #wpbody #wpbody-content .store-banner-settings-wrapper .store-banner-settings-container .header-part .left-header ul li a.active {
+  background-color: rgba(230, 240, 255, 0.2);
 }
 .store-banner-settings-template #wpwrap #wpcontent #wpbody #wpbody-content .store-banner-settings-wrapper .store-banner-settings-container .header-part .left-header .list-inline .list-inline-item:not(:last-child) {
   margin-right: 24px;

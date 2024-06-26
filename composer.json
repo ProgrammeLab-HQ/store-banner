@@ -1,0 +1,25 @@
+{
+  "name": "ptsl/store-banner",
+  "description": "Store Banner plugin for WooCommerce to show highlight banners.",
+  "type": "wordpress-plugin",
+  "license": "GPLv2",
+  "autoload": {
+    "psr-4": {
+      "Ptsl\\StoreBanner\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "ProgrammeLab"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}
