@@ -122,6 +122,8 @@ $dark_blue_color: #002e73;
     background-color: #ffffff;
     .nav-area {
       border-right: 1px solid #e1e4e7;
+      flex: 0 0 289px;
+      width: 289px;
       .options-menu {
         padding: 24px 0;
         margin: 0;
@@ -225,6 +227,9 @@ $dark_blue_color: #002e73;
         }
       }
     }
+    .options-area {
+      flex: 1;
+    }
   }
   #wpwrap {
     #wpcontent {
@@ -237,6 +242,13 @@ $dark_blue_color: #002e73;
           }
           .store-banner-settings-wrapper {
             .store-banner-settings-container {
+              .card {
+                margin-top: 0;
+                padding: 0;
+                display: block;
+                width: 100%;
+                max-width: unset;
+              }
               padding: 30px 15px;
               .topbar-part {
                 border-top-left-radius: 8px;

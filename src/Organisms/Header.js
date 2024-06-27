@@ -73,7 +73,7 @@ function HeaderLeftNav() {
     let query = useQuery();  
     return (
         <ul className="list-inline">
-            <li className="list-inline-item" onClick={(e) => { fn(e, 'welcome') }}>
+            <li className="list-inline-item" /*onClick={(e) => { fn(e, 'welcome') }}*/>
                 <NavLink 
                 to="?page=store-banner"                    
                 className={({isActive}) => 
@@ -85,7 +85,7 @@ function HeaderLeftNav() {
                 
                 >{__('Welcome', 'store-banner')}</NavLink>
             </li>
-            <li className="list-inline-item" onClick={(e) => { fn(e, 'settings') }}>
+            <li className="list-inline-item" /*onClick={(e) => { fn(e, 'settings') }}*/>
                 <NavLink 
                     to="?page=store-banner&path=settings"
                     className={({isActive}) => 

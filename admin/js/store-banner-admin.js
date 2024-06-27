@@ -1,6 +1,28 @@
+ 
 (function( $ ) {
 	'use strict';
-
+	let timer;
+	function startTimer() {
+		timer = setInterval(function () {
+			const urlParams = new URLSearchParams(window.location.search);
+			const page = urlParams.get('page');
+			const path = urlParams.get('path');
+			if (path === 'settings') {
+				if (!$('#toplevel_page_store-banner').find('li:last').hasClass("current")) {
+					$('#toplevel_page_store-banner').find('li').removeClass("current");
+					$('#toplevel_page_store-banner').find('li:last').addClass("current");
+				}
+			}
+			else  {
+				if (!$('#toplevel_page_store-banner').find('li:nth-child(2)').hasClass("current")) {
+					$('#toplevel_page_store-banner').find('li').removeClass("current");
+					$('#toplevel_page_store-banner').find('li:nth-child(2)').addClass("current");
+				}
+			}
+			//console.log(path);
+		}, 100);
+	}
+	startTimer(); 
 	/**
 	 * All of the code for your admin-facing JavaScript source
 	 * should reside in this file.

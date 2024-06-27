@@ -32,6 +32,23 @@ class Store_Banner_Activator
 	 */
 	public static function activate()
 	{
+		$programmelab_store_banner = [
+			'_enable_shop_page' => 1,
+			'_shop_page_banner_internal_image' => [
+				'url' => '',
+				'id' => '',
+			],
+			'_shop_page_banner_external_image' => [
+				'url' => '',
+				'alt' => '',
+			],
+			'_shop_page_banner_width' => 'align-center', //align-center, align-wide,align-full-width 
+			'_shop_page_banner_url' => '',
+
+			'_enable_all_product_page' => 1,
+			'_enable_specific_product' => 1,
+		];
+		update_option('programmelab_store_banner', $programmelab_store_banner);
 		add_option('store_banner_do_activation_redirect', true);
 	}
 }

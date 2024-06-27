@@ -75,9 +75,15 @@ class Store_Banner_Admin
 		 * class.
 		 */
 
+		$current_screen = get_current_screen();
+		// var_dump($current_screen);
+		if ($current_screen->base == 'toplevel_page_store-banner') {
+			wp_enqueue_style($this->plugin_name . '-bootstrap.min', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), $this->version, 'all');
+			// wp_deregister_style('forms');
+		}
 
-		wp_enqueue_style($this->plugin_name . '-grid', plugin_dir_url(__FILE__) . 'css/grid.css', array(), $this->version, 'all');
-		wp_enqueue_style($this->plugin_name . '-utilities', plugin_dir_url(__FILE__) . 'css/utilities.css', array(), $this->version, 'all');
+		// wp_enqueue_style($this->plugin_name . '-grid', plugin_dir_url(__FILE__) . 'css/grid.css', array(), $this->version, 'all');
+		// wp_enqueue_style($this->plugin_name . '-utilities', plugin_dir_url(__FILE__) . 'css/utilities.css', array(), $this->version, 'all');
 
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/store-banner-admin.css', array(), $this->version, 'all');
 	}
@@ -104,16 +110,16 @@ class Store_Banner_Admin
 
 
 
-		global $screen_id_options;
-		// var_dump($screen_id_options);
-		if ($screen_id_options == 'toplevel_page_react-settings-page-options') {
+		$current_screen = get_current_screen();
+		// var_dump($current_screen);
+		if ($current_screen->base == 'toplevel_page_store-banner') {
 
 			$plugin_url  = plugin_dir_url(__DIR__);
 			wp_enqueue_script(
 				'react-store-banner',
-				$plugin_url . '/build/index.js',
+				$plugin_url . 'build/index.js',
 				array('wp-element', 'wp-api-fetch', 'wp-i18n'),
-				'1.00',
+				$this->version,
 				true
 			);
 		}
@@ -352,5 +358,87 @@ class Store_Banner_Admin
 			remove_all_actions('user_admin_notices');
 			remove_all_actions('admin_notices');
 		}
+	}
+
+	/*
+	* Add custom routes to the Rest API
+	*
+	* @since    1.0.0
+	*/
+	public function store_banner_rest_api_register_route()
+	{
+
+		//Add the GET 'store_banner/v1/options' endpoint to the Rest API
+		register_rest_route(
+			'store_banner/v1',
+			'/options',
+			array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'rest_api_store_banner_read_options_callback'],
+				'permission_callback' => '__return_true'
+			)
+		);
+
+		//Add the POST 'store_banner/v1/options' endpoint to the Rest API
+		register_rest_route(
+			'store_banner/v1',
+			'/options',
+			array(
+				'methods'             => 'POST',
+				'callback'            => [$this, 'rest_api_store_banner_update_options_callback'],
+				'permission_callback' => '__return_true'
+			)
+		);
+	}
+	/*
+	* Callback for the GET 'store_banner/v1/options' endpoint of the Rest API
+	*/
+	public function rest_api_store_banner_read_options_callback($data)
+	{
+
+		//Check the capability
+		if (!current_user_can('manage_options')) {
+			return new WP_Error(
+				'rest_read_error',
+				'Sorry, you are not allowed to view the options.',
+				array('status' => 403)
+			);
+		}
+
+		//Generate the response
+		$response = [];
+		$response['plugin_option_1'] = get_option('plugin_option_1');
+		$response['plugin_option_2'] = get_option('plugin_option_2');
+		$response['programmelab_store_banner'] = get_option('programmelab_store_banner', []);
+
+
+		//Prepare the response
+		$response = new WP_REST_Response($response);
+
+		return $response;
+	}
+	public function rest_api_store_banner_update_options_callback($request)
+	{
+
+		if (!current_user_can('manage_options')) {
+			return new WP_Error(
+				'rest_update_error',
+				'Sorry, you are not allowed to update the DAEXT UI Test options.',
+				array('status' => 403)
+			);
+		}
+
+		//Get the data and sanitize
+		//Note: In a real-world scenario, the sanitization function should be based on the option type.
+		$plugin_option_1 = sanitize_text_field($request->get_param('plugin_option_1'));
+		$plugin_option_2 = sanitize_text_field($request->get_param('plugin_option_2'));
+
+		//Update the options
+		update_option('plugin_option_1', $plugin_option_1);
+		update_option('plugin_option_2', $plugin_option_2);
+
+		$response = new WP_REST_Response('Data successfully added.', '200');
+
+		return $response;
 	}
 }
