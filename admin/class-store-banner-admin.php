@@ -80,12 +80,16 @@ class Store_Banner_Admin
 		if ($current_screen->base == 'toplevel_page_store-banner') {
 			wp_enqueue_style($this->plugin_name . '-bootstrap.min', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), $this->version, 'all');
 			// wp_deregister_style('forms');
+			wp_enqueue_style($this->plugin_name . '-hint-css', STORE_BANNER_PATH . 'assets/plugins/cool-hint-css/src/hint.css', array(), $this->version, 'all');
+			wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/store-banner-admin.css', array(), $this->version, 'all');
 		}
 
 		// wp_enqueue_style($this->plugin_name . '-grid', plugin_dir_url(__FILE__) . 'css/grid.css', array(), $this->version, 'all');
 		// wp_enqueue_style($this->plugin_name . '-utilities', plugin_dir_url(__FILE__) . 'css/utilities.css', array(), $this->version, 'all');
 
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/store-banner-admin.css', array(), $this->version, 'all');
+
+
+
 	}
 
 	/**
@@ -114,15 +118,18 @@ class Store_Banner_Admin
 		// var_dump($current_screen);
 		if ($current_screen->base == 'toplevel_page_store-banner') {
 
+			wp_enqueue_media();
 			$plugin_url  = plugin_dir_url(__DIR__);
 			wp_enqueue_script(
 				'react-store-banner',
 				$plugin_url . 'build/index.js',
-				array('wp-element', 'wp-api-fetch', 'wp-i18n'),
+				array('wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n', 'wp-media-utils', 'wp-block-editor', 'react', 'react-dom'),
 				$this->version,
 				true
 			);
 		}
+
+
 
 
 
@@ -432,10 +439,12 @@ class Store_Banner_Admin
 		//Note: In a real-world scenario, the sanitization function should be based on the option type.
 		$plugin_option_1 = sanitize_text_field($request->get_param('plugin_option_1'));
 		$plugin_option_2 = sanitize_text_field($request->get_param('plugin_option_2'));
+		$programmelab_store_banner = $request->get_param('programmelab_store_banner');
 
 		//Update the options
 		update_option('plugin_option_1', $plugin_option_1);
 		update_option('plugin_option_2', $plugin_option_2);
+		update_option('programmelab_store_banner', $programmelab_store_banner);
 
 		$response = new WP_REST_Response('Data successfully added.', '200');
 

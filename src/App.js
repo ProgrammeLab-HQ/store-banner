@@ -40,6 +40,7 @@ import {
 import Header from './Organisms/Header';
 import Elements from './Pages/Elements';
 import Home from './Pages/Home';
+import Image from "./Pages/Image";
 import NotFound from "./Pages/NotFound";
 import Settings from "./Pages/Settings";
 // React Router does not have any opinions about
@@ -80,6 +81,7 @@ function LoadSettingsPages() {
   if (query.get("path")){
     if(query.get("path") === 'settings') {return <Settings />;} 
     else if(query.get("path") === 'elements') {return <Elements /> ;}
+    else if(query.get("path") === 'image') {return <Image onSelectImage={(image) => console.log(image)} /> ;}
     else {return <NotFound/>;}
   }
   else {return <Home />;} 
@@ -122,6 +124,18 @@ function LoadSettingsPages() {
               ].join(" ")
             }
             >Elements</NavLink>
+          </li>
+          <li>
+            <NavLink 
+            to="?page=store-banner&path=image"
+            className={({ isActive, isPending, isTransitioning }) =>
+              [
+                isPending ? "pending" : "",
+                isActive ? "current" : "",
+                isTransitioning ? "transitioning" : "",
+              ].join(" ")
+            }
+            >Image</NavLink>
           </li>
         </ul>
       </>

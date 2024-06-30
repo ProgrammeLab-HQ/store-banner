@@ -206,6 +206,189 @@
 .store-banner-settings-template .settings-box .options-area {
   flex: 1;
 }
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit {
+  padding: 24px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .title-wrap label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0c0c0c;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  margin-bottom: 8px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .title-wrap .description {
+  color: #757575;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .title-wrap .description > *:last-child {
+  margin-bottom: 0;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .hints-css {
+  color: #9e9e9e;
+  cursor: help;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .hints-css::after {
+  font-size: 12px !important;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label {
+  display: block;
+  float: left !important;
+  cursor: pointer;
+  position: relative;
+  width: 36px;
+  flex: 0 0 36px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: left 0.15s ease-out;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label input:checked ~ em {
+  background: #0167ff;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label input:checked ~ em:before {
+  opacity: 0;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label input:checked ~ em:after {
+  opacity: 1;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label input:checked ~ span {
+  left: 20px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label em {
+  font-family: "Roboto", sans-serif;
+  font-size: 11px;
+  line-height: 26px;
+  font-weight: 500;
+  font-style: normal;
+  text-transform: uppercase;
+  color: #fff;
+  position: relative;
+  display: block;
+  height: inherit;
+  background-color: #b2b2b2;
+  transition: background 0.15s ease-out;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label em:before {
+  position: absolute;
+  transition: opacity 0.15s ease-out;
+  right: 14px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .switch-setting-unit .switcher label em:after {
+  position: absolute;
+  transition: opacity 0.15s ease-out;
+  left: 14px;
+  opacity: 0;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 24px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name {
+  position: relative;
+  text-align: center;
+  border: 2px dashed #dcdcde;
+  background: #f5f9ff;
+  border-radius: 4px;
+  padding: 3px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name img {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .store-banner-remove-image {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  content: url('data:image/svg+xml,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="%23F24233"/><path d="M11.9995 13.0602L15.7118 16.7725L16.7725 15.7118L13.0602 11.9995L16.7725 8.28723L15.7119 7.22657L11.9995 10.9389L8.28722 7.22656L7.22656 8.28722L10.9389 11.9995L7.22657 15.7119L8.28723 16.7725L11.9995 13.0602Z" fill="white"/></svg>');
+  z-index: 3;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery img {
+  vertical-align: top;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery:focus {
+  outline: none;
+  box-shadow: none;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery::before, .store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery::before {
+  background-color: rgba(26, 26, 26, 0.4);
+  z-index: 1;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery::after {
+  background-image: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.33863 0C5.39784 0 3.53461 0.762949 2.14981 2.1247C1.46575 2.805 0.923457 3.61462 0.554422 4.50654C0.185387 5.39846 -0.00303717 6.35492 8.94863e-05 7.32037C0.0211856 9.26264 0.800055 11.1196 2.17023 12.4944C3.54041 13.8692 5.3932 14.6527 7.33262 14.6776C8.48562 14.6714 9.6207 14.3913 10.6446 13.8604L11.7395 15.0711L15.0788 11.7243L13.8832 10.6418C14.589 9.26182 14.8381 7.69269 14.5944 6.16151C14.3507 4.63033 13.6268 3.21653 12.5274 2.1247C11.1426 0.762949 9.27941 0 7.33863 0ZM5.38628 12.9743C4.52748 12.6842 3.74442 12.2053 3.09457 11.5726C1.98322 10.4371 1.36061 8.9106 1.36036 7.32064C1.36011 5.73068 1.98224 4.20397 3.09323 3.06815C4.22693 1.95529 5.75114 1.33195 7.33863 1.33195C8.92612 1.33195 10.4503 1.95529 11.584 3.06815C12.5395 4.01565 13.1475 5.25848 13.3095 6.59527C13.4715 7.93205 13.1781 9.28446 12.4767 10.4334C11.9967 11.2032 11.3506 11.8557 10.5859 12.343C9.82125 12.8302 8.95734 13.1398 8.05759 13.249C7.15784 13.3583 6.24508 13.2644 5.38628 12.9743ZM19.7645 16.2675C19.6185 15.9419 19.4091 15.6488 19.1487 15.4052L16.0729 12.6216L12.6335 16.0654L15.4151 19.1389C15.6572 19.4019 15.9496 19.6136 16.2749 19.7613C16.6002 19.9091 16.9518 19.9899 17.3089 19.9991C17.666 20.0082 18.0212 19.9455 18.3537 19.8146C18.6861 19.6838 18.9889 19.4874 19.2442 19.2371C19.4921 18.9809 19.6866 18.6776 19.8162 18.3452C19.9459 18.0128 20.008 17.6579 19.9992 17.3011C19.9903 16.9444 19.9105 16.593 19.7645 16.2675ZM6.67083 6.66466H5.33643C5.15948 6.66466 4.98977 6.73506 4.86465 6.86036C4.73953 6.98567 4.66923 7.15562 4.66923 7.33283C4.66923 7.51004 4.73953 7.67999 4.86465 7.80529C4.98977 7.9306 5.15948 8.001 5.33643 8.001H6.67083V9.33733C6.67083 9.51454 6.74113 9.68449 6.86625 9.8098C6.99138 9.9351 7.16108 10.0055 7.33803 10.0055C7.51499 10.0055 7.68469 9.9351 7.80982 9.8098C7.93494 9.68449 8.00523 9.51454 8.00523 9.33733V8.001H9.33964C9.51659 8.001 9.68629 7.9306 9.81142 7.80529C9.93654 7.67999 10.0068 7.51004 10.0068 7.33283C10.0068 7.15562 9.93654 6.98567 9.81142 6.86036C9.68629 6.73506 9.51659 6.66466 9.33964 6.66466H8.00523V5.32832C8.00523 5.15111 7.93494 4.98116 7.80982 4.85586C7.68469 4.73055 7.51499 4.66016 7.33803 4.66016C7.16108 4.66016 6.99138 4.73055 6.86625 4.85586C6.74113 4.98116 6.67083 5.15111 6.67083 5.32832V6.66466Z" fill="white"/></svg>');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  z-index: 2;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery:hover::before, .store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-name.with-close-button .gallery:hover::after {
+  opacity: 1;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .image-uploader-unit .image-uploader .file-detail .upload-help-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #7c828b;
+  margin-bottom: 20px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit.store-banner-setting-sub-unit {
+  margin-left: 24px;
+  margin-right: 24px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit + .store-banner-setting-unit {
+  border-top: 1px solid #e1e4e7;
+}
 .store-banner-settings-template #wpwrap #wpcontent {
   padding-left: 0;
 }

@@ -35,15 +35,16 @@ class Store_Banner_Activator
 		$programmelab_store_banner = [
 			'_enable_shop_page' => 1,
 			'_shop_page_banner_internal_image' => [
-				'url' => '',
-				'id' => '',
+				'url' => 'http://wordpress.test/wp-content/uploads/2024/05/banner.png',
+				'thumbnail' => 'http://wordpress.test/wp-content/uploads/2024/05/banner-150x150.png',
+				'id' => '1868',
 			],
 			'_shop_page_banner_external_image' => [
 				'url' => '',
 				'alt' => '',
 			],
 			'_shop_page_banner_width' => 'align-center', //align-center, align-wide,align-full-width 
-			'_shop_page_banner_url' => '',
+			'_shop_page_banner_url' => 'http://wordpress.test/shop/',
 
 			'_enable_all_product_page' => 1,
 			'_enable_specific_product' => 1,
