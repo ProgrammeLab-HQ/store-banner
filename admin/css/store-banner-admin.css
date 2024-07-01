@@ -21,7 +21,7 @@
 .store-banner-settings-template a {
   box-shadow: none;
 }
-.store-banner-settings-template .button {
+.store-banner-settings-template .theme-button {
   background-color: transparent;
   color: #757575;
   font-size: 16px;
@@ -34,43 +34,46 @@
   text-decoration: none;
   display: inline-block;
 }
-.store-banner-settings-template .button:hover {
+.store-banner-settings-template .theme-button:hover {
   color: #ffffff;
   background-color: #757575;
   border-color: #757575;
 }
-.store-banner-settings-template .button-outline-blue {
+.store-banner-settings-template .theme-button-outline-blue {
   color: #0167ff;
   background-color: transparent;
   border-color: #0167ff;
 }
-.store-banner-settings-template .button-outline-blue:hover {
+.store-banner-settings-template .theme-button-outline-blue:hover {
   color: #ffffff;
   background-color: #0167ff;
   border-color: #0167ff;
 }
-.store-banner-settings-template .button-solid {
+.store-banner-settings-template .theme-button-solid {
   color: #ffffff;
   background-color: #757575;
   border-color: #757575;
 }
-.store-banner-settings-template .button-solid:hover {
+.store-banner-settings-template .theme-button-solid:hover {
   color: #757575;
   background-color: transparent;
   border-color: #e1e4e7;
 }
-.store-banner-settings-template .button-solid-blue {
+.store-banner-settings-template .theme-button-solid-blue {
   color: #ffffff;
   background-color: #0167ff;
   border-color: #0167ff;
 }
-.store-banner-settings-template .button-solid-blue:hover {
+.store-banner-settings-template .theme-button-solid-blue:hover {
   color: #0167ff;
   background-color: transparent;
   border-color: #0167ff;
 }
 .store-banner-settings-template .btn-group {
   display: inline-block;
+}
+.store-banner-settings-template .btn-group a + a {
+  margin-left: 5px;
 }
 .store-banner-settings-template .list-inline {
   padding-left: 0;
@@ -208,6 +211,36 @@
 }
 .store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit {
   padding: 24px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=text],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=password],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=color],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=date],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=datetime],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=datetime-local],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=email],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=month],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=number],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=search],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=tel],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=time],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=url],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control input[type=week],
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control select,
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control textarea {
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.41px;
+  padding: 8px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control .components-base-control__field {
+  margin-bottom: 0 !important;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .input-control .components-input-control__backdrop {
+  border-style: none !important;
 }
 .store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit .title-wrap label {
   display: flex;
@@ -386,8 +419,18 @@
   padding-left: 0;
   padding-right: 0;
 }
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit.store-banner-setting-sub-unit .wrapper {
+  width: 100%;
+  max-width: 470px;
+}
+.store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit.store-banner-setting-sub-unit .wrapper > *:not(:first-child) {
+  margin-top: 24px;
+}
 .store-banner-settings-template .settings-box .options-area .options .store-banner-setting-unit + .store-banner-setting-unit {
   border-top: 1px solid #e1e4e7;
+}
+.store-banner-settings-template .settings-box .options-area .save-button {
+  padding: 24px;
 }
 .store-banner-settings-template #wpwrap #wpcontent {
   padding-left: 0;

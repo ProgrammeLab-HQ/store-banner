@@ -28,7 +28,7 @@ export default function Cta(props) {
                                 <a 
                                 className={
                                     [
-                                        'button',
+                                        'theme-button',
                                         (item.className) ? item.className : ''
                                     ].join(" ")
                                 }

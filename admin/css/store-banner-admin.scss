@@ -23,7 +23,7 @@ $dark_blue_color: #002e73;
   a {
     box-shadow: none;
   }
-  .button {
+  .theme-button {
     background-color: transparent;
     color: #757575;
     font-size: 16px;
@@ -75,6 +75,11 @@ $dark_blue_color: #002e73;
   }
   .btn-group {
     display: inline-block;
+    a {
+      & + a {
+        margin-left: 5px;
+      }
+    }
   }
   .list-inline {
     padding-left: 0;
@@ -232,6 +237,38 @@ $dark_blue_color: #002e73;
       .options {
         .store-banner-setting-unit {
           padding: 24px;
+          .input-control {
+            input[type="text"],
+            input[type="password"],
+            input[type="color"],
+            input[type="date"],
+            input[type="datetime"],
+            input[type="datetime-local"],
+            input[type="email"],
+            input[type="month"],
+            input[type="number"],
+            input[type="search"],
+            input[type="tel"],
+            input[type="time"],
+            input[type="url"],
+            input[type="week"],
+            select,
+            textarea {
+              border: 1px solid #dcdcde;
+              border-radius: 4px;
+              width: 100%;
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 16.41px;
+              padding: 8px;
+            }
+            .components-base-control__field {
+              margin-bottom: 0 !important;
+            }
+            .components-input-control__backdrop {
+              border-style: none !important;
+            }
+          }
           .title-wrap {
             label {
               display: flex;
@@ -446,11 +483,21 @@ $dark_blue_color: #002e73;
             margin-right: 24px;
             padding-left: 0;
             padding-right: 0;
+            .wrapper {
+              width: 100%;
+              max-width: 470px;
+              & > *:not(:first-child) {
+                margin-top: 24px;
+              }
+            }
           }
           & + .store-banner-setting-unit {
             border-top: 1px solid #e1e4e7;
           }
         }
+      }
+      .save-button {
+        padding: 24px;
       }
     }
   }

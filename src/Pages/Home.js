@@ -37,7 +37,7 @@ return (
                                     {
                                         'url': '#',
                                         'title': __('Create New Page', 'store-banner'),
-                                        'className': 'button-solid button-solid-blue',
+                                        'className': 'theme-button-solid theme-button-solid-blue',
                                     },
                                     {
                                         'url': '#',

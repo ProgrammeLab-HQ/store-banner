@@ -1,0 +1,174 @@
+import { __ } from '@wordpress/i18n';
+import { Button, Notice, TextControl } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
+import React from 'react';
+
+const Settings = () => {
+    
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [options, setOptions] = useState({});
+    const [loading,setLoading] = useState(true);
+    useEffect(() => {
+        console.log('ook');
+        /**
+         * Initialize the options fields with the data received from the REST API
+         * endpoint provided by the plugin.
+         */
+        wp.apiFetch({path: '/store_banner/v1/options'}).
+        then(data => {
+                console.log(data);
+                // let options = {};
+                //Set the new values of the options in the state
+                // setOption1(data['plugin_option_1'])
+                // setOption2(data['plugin_option_2'])
+                setOptions(data['programmelab_store_banner'])
+            },
+        );
+    }, []);
+    useEffect(() => {
+        if (Object.keys(options).length) {
+            setLoading(false);
+        }
+    }, [options]);
+    /*const initialData = {
+        "_shop_page": {
+            "_enable": 1,
+            "_banner_internal_image": {
+                "id": "1868",
+                "thumbnail": "http://wordpress.test/wp-content/uploads/2024/05/banner-150x150.png",
+                "url": "http://wordpress.test/wp-content/uploads/2024/05/banner-150x150.png"
+            },
+            "_banner_external_image": {
+                "alt": "",
+                "url": ""
+            },
+            "_banner_width": "align-center",
+            "_banner_url": "http://wordpress.test/shop/"
+        },
+        "_all_product_page": {
+            "_enable": 1,
+            "_banner_internal_image": {
+                "id": "1868",
+                "thumbnail": "http://wordpress.test/wp-content/uploads/2024/05/banner-150x150.png",
+                "url": "http://wordpress.test/wp-content/uploads/2024/05/banner.png"
+            },
+            "_banner_external_image": {
+                "alt": "",
+                "url": ""
+            },
+            "_banner_width": "align-center",
+            "_banner_url": "http://wordpress.test/shop/"
+        },
+        "_specific_product": {
+            "_enable": 1,
+            "_banner_internal_image": {
+                "id": "1868",
+                "thumbnail": "http://wordpress.test/wp-content/uploads/2024/05/banner-150x150.png",
+                "url": "http://wordpress.test/wp-content/uploads/2024/05/banner.png"
+            },
+            "_banner_external_image": {
+                "alt": "",
+                "url": ""
+            },
+            "_banner_width": "align-center",
+            "_banner_url": "http://wordpress.test/shop/"
+        }
+    };*/
+    // const [options, setOptions] = useState(initialData);
+
+    useEffect(() => {
+        // Reset success message after a while
+        if (success) {
+            const timer = setTimeout(() => setSuccess(''), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [success]);
+
+    const updateField = (path, value) => {
+        const keys = path.split('.');
+        let tempData = { ...options };
+
+        keys.reduce((acc, key, index) => {
+            if (index === keys.length - 1) {
+                acc[key] = value;
+            } else {
+                if (!acc[key]) acc[key] = {};
+                return acc[key];
+            }
+        }, tempData);
+
+        setOptions(tempData);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        // console.log(options);
+        wp.apiFetch({
+            path: '/store_banner/v1/options',
+            method: 'POST',
+            data: {
+                'programmelab_store_banner': options
+            },
+        }).then(data => {
+            alert('Options saved successfully!');
+        });
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            {/* {console.log(options)} */}
+            {error && (
+                <Notice status="error" onRemove={() => setError('')}>
+                    {error}
+                </Notice>
+            )}
+            {success && (
+                <Notice status="success" onRemove={() => setSuccess('')}>
+                    {success}
+                </Notice>
+            )}
+            <h2>Shop Page Settings</h2>
+            <TextControl
+                label="Shop Page Banner URL"
+                value={options._shop_page._banner_internal_image.url}
+                onChange={(value) => updateField('_shop_page._banner_internal_image.url', value)}
+            />
+            <TextControl
+                label="Shop Page Banner Width"
+                value={options._shop_page._banner_width}
+                onChange={(value) => updateField('_shop_page._banner_width', value)}
+            />
+
+            <h2>All Product Page Settings</h2>
+            <TextControl
+                label="All Product Page Banner URL"
+                value={options._all_product_page._banner_internal_image.url}
+                onChange={(value) => updateField('_all_product_page._banner_internal_image.url', value)}
+            />
+            <TextControl
+                label="All Product Page Banner Width"
+                value={options._all_product_page._banner_width}
+                onChange={(value) => updateField('_all_product_page._banner_width', value)}
+            />
+
+            <h2>Specific Product Page Settings</h2>
+            <TextControl
+                label="Specific Product Page Banner URL"
+                value={options._specific_product._banner_internal_image.url}
+                onChange={(value) => updateField('_specific_product._banner_internal_image.url', value)}
+            />
+            <TextControl
+                label="Specific Product Page Banner Width"
+                value={options._specific_product._banner_width}
+                onChange={(value) => updateField('_specific_product._banner_width', value)}
+            />
+
+            <Button isPrimary type="submit">
+                Save Settings
+            </Button>
+        </form>
+    );
+};
+
+export default Settings;

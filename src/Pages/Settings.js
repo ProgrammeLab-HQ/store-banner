@@ -1,25 +1,26 @@
-import { __ } from '@wordpress/i18n';
 // import React, { useEffect, useState } from 'react';
 // import { Card, Col, Container, Row } from 'react-bootstrap';
 // const useEffect = wp.element.useState;
 // const useState = wp.element.useState;
 // import Logo from '../assets/images/logo.svg';
 import { MediaUpload } from '@wordpress/block-editor';
-import { Button, Notice } from '@wordpress/components';
+import { Button, Notice, SelectControl, TextControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import noImageAvailable from '../assets/images/no_image_available.png';
+import { Col, Container, Image, Row } from 'react-bootstrap';
 const nonce = document.getElementById('nonce-field');
 export default function Settings(props) {
 
-    const [option1, setOption1] = useState('');
-    const [option2, setOption2] = useState('');
+    // const [option1, setOption1] = useState('');
     const [options, setOptions] = useState({});
     const [loading,setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [image, setImage] = useState(null);
+    const [mediaId, setMediaId] = useState(null);
+
 
     useEffect(() => {
         /**
@@ -30,8 +31,8 @@ export default function Settings(props) {
         then(data => {
                 let options = {};
                 //Set the new values of the options in the state
-                setOption1(data['plugin_option_1'])
-                setOption2(data['plugin_option_2'])
+                // setOption1(data['plugin_option_1'])
+                // setOption2(data['plugin_option_2'])
                 setOptions(data['programmelab_store_banner'])
             },
         );
@@ -41,24 +42,53 @@ export default function Settings(props) {
             setLoading(false);
         }
     }, [options]);
-    const handleOptionsChange = (key, value) => {
-        setOptions(prevOptions => ({
-            ...prevOptions,
-            [key]: value
-        }));
-        // console.log(options);
+
+    const updateField = (path, value) => {
+        const keys = path.split('.');
+        let tempData = { ...options };
+
+        keys.reduce((acc, key, index) => {
+            if (index === keys.length - 1) {
+                acc[key] = value;
+            } else {
+                if (!acc[key]) acc[key] = {};
+                return acc[key];
+            }
+        }, tempData);
+
+        setOptions(tempData);
+
+        wp.apiFetch({
+            path: '/store_banner/v1/options',
+            method: 'POST',
+            data: {
+                'programmelab_store_banner': options
+            },
+        }).then(data => {
+            console.log('Options saved successfully!');
+        });
     };
 
-    const handleNestedOptionsChange = (key, subKey, value) => {
-        setOptions(prevOptions => ({
-            ...prevOptions,
-            [key]: {
-                ...prevOptions[key],
-                [subKey]: value
-            }
-        }));
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        // console.log(options);
+        wp.apiFetch({
+            path: '/store_banner/v1/options',
+            method: 'POST',
+            data: {
+                'programmelab_store_banner': options
+            },
+        }).then(data => {
+            alert('Options saved successfully!');
+        });
     };
-    const onSelect = (media) => {
+    const ALLOWED_MEDIA_TYPES = ['image'];
+    const handleSelect = (media) => {
+        //console.log('selected media:', media);
+        setMediaId(media.id);
+        setImage(media);
+    };
+    /*const onSelect = (media) => {
         setImage(media);
         if (onSelectImage) {
             onSelectImage(media);
@@ -70,7 +100,7 @@ export default function Settings(props) {
         if (onSelectImage) {
             onSelectImage(null);
         }
-    };
+    };*/
     return (
         <section className="settings-page-wrap">
             <Container fluid="fluid">
@@ -112,26 +142,37 @@ export default function Settings(props) {
                                             loading
                                             ?<div className="page-loader" />
                                             :<>
+                                            <form onSubmit={handleSubmit}>
                                                 <div className="options">
-                                                    
+                                                
+                                                    {/* {console.log(options)} */}
+                                                    {error && (
+                                                        <Notice status="error" onRemove={() => setError('')}>
+                                                            {error}
+                                                        </Notice>
+                                                    )}
+                                                    {success && (
+                                                        <Notice status="success" onRemove={() => setSuccess('')}>
+                                                            {success}
+                                                        </Notice>
+                                                    )}
                                                     <div className="store-banner-setting-unit">
                                                         <div className="switch-setting-unit">
                                                             <div className="title-wrap">
                                                                 <label>
-                                                                    <span>Shop</span>
-                                                                    <span className="hints-css hint--bottom" aria-label="Enable banner option for shop page."><i className="dashicons dashicons-editor-help"></i></span>
+                                                                    <span>{__('Shop', 'store-banner')}</span>
+                                                                    <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
                                                                 </label>
-                                                                <div className="description"><p>Choose a banner for the shop page that best aligns with your current marketing goals and target audience.</p></div>
+                                                                <div className="description"><p>{__('Choose a banner for the shop page that best aligns with your current marketing goals and target audience.', 'store-banner')}</p></div>
                                                             </div>
                                                             <div className="position-relative switcher">
-                                                                <label htmlFor="enable_shop_page">
+                                                                <label htmlFor="shop_page_enable">
                                                                     <input 
+                                                                    id="shop_page_enable"
                                                                     type="checkbox" 
-                                                                    name="_enable_shop_page" 
-                                                                    id="enable_shop_page" 
                                                                     value="1"
-                                                                    checked={options?._enable_shop_page ? 'checked' : ''}
-                                                                    onChange = {(event) => handleOptionsChange('_enable_shop_page', event.target.checked)}
+                                                                    checked={options?._shop_page?._enable}
+                                                                    onChange = {(event) => updateField('_shop_page._enable', event.target.checked)}
                                                                     />
                                                                         <em data-on="on" data-off="off"></em>
                                                                         <span></span>
@@ -140,151 +181,265 @@ export default function Settings(props) {
                                                         </div>
                                                     </div>
                                                     <div className="store-banner-setting-unit store-banner-setting-sub-unit">
-                                                        <div className="image-uploader-unit">
-                                                            <div className="title-wrap">
-                                                                <label>
-                                                                    <span>Banner Image</span>
-                                                                    <span className="hints-css hint--bottom" aria-label="Enable banner option for shop page."><i className="dashicons dashicons-editor-help"></i></span>
-                                                                </label>
-                                                            </div>
-                                                            <div className="position-relative store_banner_image">
-                                                                <div className="image-uploader">
-                                                                    <div
-                                                                        className={
-                                                                            [
-                                                                                'file-name',
-                                                                                options?._shop_page_banner_internal_image?.id ? 'with-close-button' : ''
-                                                                            ].join(" ")
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            options?._shop_page_banner_internal_image?.id ?
-                                                                            <>
-                                                                            <span className="gallery" data-fancybox="gallery-rand" data-src={options._shop_page_banner_internal_image.url}>
-                                                                                <img src={options._shop_page_banner_internal_image.thumbnail} className="option-image" />
-                                                                            </span>
-                                                                            <span 
-                                                                                className="store-banner-remove-image" 
-                                                                                data-base={noImageAvailable}
-
-                                                                                ></span>
-                                                                            </>
-                                                                            :
-                                                                            <span className="gallery">
-                                                                                <img src={noImageAvailable} className="option-image" />
-                                                                            </span>
-
-                                                                        }
-                                                                        
-                                                                        
-                                                                    </div>
-                                                                    <div className="file-detail">
-                                                                        <input
-                                                                            type="hidden"
-                                                                            className="url"
-                                                                            value={options._shop_page_banner_internal_image?.url || ''}
-                                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'url', event.target.value)}
-                                                                        />
-                                                                        <input
-                                                                            type="hidden"
-                                                                            className="thumbnail"
-                                                                            value={options._shop_page_banner_internal_image?.thumbnail || ''}
-                                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'thumbnail', event.target.value)}
-                                                                        />
-                                                                        <input
-                                                                            type="hidden"
-                                                                            className="id"
-                                                                            value={options._shop_page_banner_internal_image?.id || ''}
-                                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'id', event.target.value)}
-                                                                        />
-                                                                        <div className="upload-help-text">
-                                                                            <p>Size: Optional <br /> File Support: .jpg, .jpeg, .gif, or .png.</p>
+                                                        <div className="wrapper">
+                                                            <Row>
+                                                                <Col className="col-lg-6">
+                                                                    Image Preview {mediaId} {image?.url}
+                                                                    <Image src={options._shop_page._banner_internal_image.thumbnail}/>
+                                                                </Col>
+                                                                <Col>
+                                                                <MediaUpload
+                                                                    onSelect={handleSelect}
+                                                                    onChange={console.log(image)}
+                                                                    onChange = {(image) => {
+                                                                        updateField('_shop_page._banner_internal_image.url', image.url)
+                                                                        updateField('_shop_page._banner_internal_image.thumbnail', image.sizes.thumbnail.url)
+                                                                        updateField('_shop_page._banner_internal_image.id', image.id)
+                                                                        // setImage('');
+                                                                    }}
+                                                                    allowedTypes={ALLOWED_MEDIA_TYPES}
+                                                                    value={mediaId}
+                                                                    render={({ open }) => (
+                                                                        <Button onClick={open}>Open Media Library</Button>
+                                                                    )}
+                                                                />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="col-lg-6">
+                                                                    <div className="text-setting-unit">
+                                                                        <div className="title-wrap">
+                                                                            <label>
+                                                                                <span>{__('Upload from an URL', 'store-banner')}</span>
+                                                                                <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                            </label>
                                                                         </div>
-                                                                        <button className="button button-primary image-uploader-button single-image-uploader-button">Upload Image</button>
+                                                                        <div className="position-relative">
+                                                                            <TextControl
+                                                                                className="input-control"
+                                                                                placeholder= {__('Add the URL here', 'store-banner')}
+                                                                                value={options?._shop_page?._banner_external_image?._url}
+                                                                                onChange={(value) => updateField('_shop_page._banner_external_image._url', value)}
+                                                                            />
+                                                                        </div>
                                                                     </div>
+                                                                </Col>
+                                                                <Col className="col-lg-6">
+                                                                    <div className="text-setting-unit">
+                                                                        <div className="title-wrap">
+                                                                            <label>
+                                                                                <span>{__('Banner Alt Text', 'store-banner')}</span>
+                                                                                <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div className="position-relative">
+                                                                            <TextControl
+                                                                                className="input-control"
+                                                                                placeholder= {__('Add the Alt text here', 'store-banner')}
+                                                                                value={options?._shop_page?._banner_external_image?.alt}
+                                                                                onChange={(value) => updateField('_shop_page._banner_external_image.alt', value)}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>  
+                                                            <Row>                                                                
+                                                                <Col className="col-lg-6">
+                                                                    <div className="select-setting-unit">
+                                                                        <div className="title-wrap">
+                                                                            <label>
+                                                                                <span>{__('Select Type', 'store-banner')}</span>
+                                                                                <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div className="position-relative">
+                                                                        <SelectControl
+                                                                            // label="Size"
+                                                                            className="input-control"
+                                                                            value={options?._shop_page?._banner_width}
+                                                                            options={ [
+                                                                                //align-center, align-wide, align-full-width 
+                                                                                { value: 'align-center', label: 'None' },
+                                                                                { value: 'align-wide', label: 'Wide Width' },
+                                                                                { value: 'align-full-width ', label: 'Full Width' },
+                                                                            ] }
+                                                                            onChange={ ( value ) => updateField( '_shop_page._banner_width', value)}
+                                                                            __nextHasNoMarginBottom
+                                                                        />
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>                                                          
+                                                            <div className="text-setting-unit">
+                                                                <div className="title-wrap">
+                                                                    <label>
+                                                                        <span>{__('Banner URL', 'store-banner')}</span>
+                                                                        <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                    </label>
+                                                                </div>
+                                                                <div className="position-relative">
+                                                                    
+                                                                    <TextControl
+                                                                        className="input-control"
+                                                                        placeholder= {__('Add the Alt text here', 'store-banner')}
+                                                                        value={options?._shop_page?._banner_url}
+                                                                        onChange={(event) => updateField('_shop_page._banner_url', event.target.value)}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+                                                    </div>
+                                                    <div className="store-banner-setting-unit">
+                                                        <div className="switch-setting-unit">
+                                                            <div className="title-wrap">
+                                                                <label>
+                                                                    <span>{__('All Product', 'store-banner')}</span>
+                                                                    <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                </label>
+                                                                <div className="description"><p>{__('Choose a banner for the products page that best aligns with your current marketing goals and target audience.', 'store-banner')}</p></div>
+                                                            </div>
+                                                            <div className="position-relative switcher">
+                                                                <label htmlFor="all_product_page_enable">
+                                                                    <input 
+                                                                    id="all_product_page_enable"
+                                                                    type="checkbox" 
+                                                                    value="1"
+                                                                    checked={options?._all_product_page?._enable}
+                                                                    onChange = {(event) => updateField('_all_product_page._enable', event.target.checked)}
+                                                                    />
+                                                                        <em data-on="on" data-off="off"></em>
+                                                                        <span></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="store-banner-setting-unit store-banner-setting-sub-unit">
+                                                        <div className="wrapper">
+                                                            <Row className="row">
+                                                                <Col className="col-lg-6">
+                                                                    <div className="text-setting-unit">
+                                                                        <div className="title-wrap">
+                                                                            <label>
+                                                                                <span>{__('Upload from an URL', 'store-banner')}</span>
+                                                                                <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div className="position-relative">
+                                                                            <TextControl
+                                                                                className="input-control"
+                                                                                placeholder= {__('Add the URL here', 'store-banner')}
+                                                                                value={options?._all_product_page?._banner_external_image?._url}
+                                                                                onChange={(value) => updateField('_all_product_page._banner_external_image._url', value)}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col className="col-lg-6">
+                                                                    <div className="text-setting-unit">
+                                                                        <div className="title-wrap">
+                                                                            <label>
+                                                                                <span>{__('Banner Alt Text', 'store-banner')}</span>
+                                                                                <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div className="position-relative">
+                                                                            <TextControl
+                                                                                className="input-control"
+                                                                                placeholder= {__('Add the Alt text here', 'store-banner')}
+                                                                                value={options?._all_product_page?._banner_external_image?.alt}
+                                                                                onChange={(value) => updateField('_all_product_page._banner_external_image.alt', value)}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col className="col-lg-6">
+                                                                    <div className="select-setting-unit">
+                                                                        <div className="title-wrap">
+                                                                            <label>
+                                                                                <span>{__('Select Type', 'store-banner')}</span>
+                                                                                <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div className="position-relative">
+                                                                        <SelectControl
+                                                                            // label="Size"
+                                                                            value={options?._all_product_page?._banner_width}
+                                                                            className="input-control"
+                                                                            options={ [
+                                                                                //align-center, align-wide, align-full-width 
+                                                                                { value: 'align-center', label: 'None' },
+                                                                                { value: 'align-wide', label: 'Wide Width' },
+                                                                                { value: 'align-full-width ', label: 'Full Width' },
+                                                                            ] }
+                                                                            onChange={ ( value ) => updateField( '_all_product_page._banner_width', value)}
+                                                                            __nextHasNoMarginBottom
+                                                                        />
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                            <div className="text-setting-unit">
+                                                                <div className="title-wrap">
+                                                                    <label>
+                                                                        <span>{__('Banner URL', 'store-banner')}</span>
+                                                                        <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                    </label>
+                                                                </div>
+                                                                <div className="position-relative">
+                                                                    <TextControl
+                                                                        // label="Size"
+                                                                        className="input-control"
+                                                                        placeholder= {__('Add the Alt text here', 'store-banner')}
+                                                                        value={options?._all_product_page?._banner_url}
+                                                                        onChange={(value) => updateField('_all_product_page._banner_url', value)}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     
-                                                    <div>
-                                                        <label>Banner Image URL</label>
-                                                        <input
-                                                            value={options._shop_page_banner_internal_image?.url || ''}
-                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'url', event.target.value)}
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <label>Options 1</label>
-                                                        <input
-                                                        value={option1}
-                                                        onChange={(event) => {
-                                                        setOption1(event.target.value);
-                                                        }}
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label>Options 2</label>
-                                                        <input
-                                                        value={option2}
-                                                        onChange={(event) => {
-                                                        setOption2(event.target.value);
-                                                        }}
-                                                        />
-                                                    </div>
-
-                                                    <div className="photo-uploader">
-                                                        {error && (
-                                                            <Notice status="error" onRemove={() => setError('')}>
-                                                                {error}
-                                                            </Notice>
-                                                        )}
-                                                        {image ? (
-                                                            <div className="photo-preview">
-                                                                <img src={image.url} alt={image.alt} />
-                                                                <Button isSecondary onClick={removeImage}>
-                                                                    Remove Image
-                                                                </Button>
+                                                    <div className="store-banner-setting-unit">
+                                                        <div className="switch-setting-unit">
+                                                            <div className="title-wrap">
+                                                                <label>
+                                                                    <span>{__('Specific Product', 'store-banner')}</span>
+                                                                    <span className="hints-css hint--bottom" aria-label={__('Enable banner option for shop page.', 'store-banner')}><i className="dashicons dashicons-editor-help"></i></span>
+                                                                </label>
+                                                                <div className="description"><p>{__('Choose a specific banner for specific products that best aligns with your current marketing goals and target audience.', 'store-banner')}</p></div>
                                                             </div>
-                                                        ) : (
-                                                            
-                                                                <MediaUpload
-                                                                    onSelect={onSelect}
-                                                                    allowedTypes={['image']}
-                                                                    value={image ? image.id : ''}
-                                                                    render={({ open }) => (
-                                                                        <Button isPrimary onClick={open}>
-                                                                            Upload Image
-                                                                        </Button>
-                                                                    )}
-                                                                />
-                                                            
-                                                        )}
+                                                            <div className="position-relative switcher">
+                                                                <label htmlFor="specific_product_enable">
+                                                                    <input 
+                                                                    id="specific_product_enable"
+                                                                    type="checkbox" 
+                                                                    value="1"
+                                                                    checked={options?._specific_product?._enable}
+                                                                    onChange = {(event) => updateField('_specific_product._enable', event.target.checked)}
+                                                                    />
+                                                                        <em data-on="on" data-off="off"></em>
+                                                                        <span></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    {/* <TextControl
+                                                        label="Shop Page Banner Width"
+                                                        value={options?._shop_page?._banner_width}
+                                                        onChange={(value) => updateField('_shop_page._banner_width', value)}
+                                                    />                                          */}
+                                                    
                                                     
                                                 </div>                                      
                                                 
                                                 <div className="save-button mt-auto">
-                                                    <button onClick={() => {
-
-                                                    wp.apiFetch({
-                                                        path: '/store_banner/v1/options',
-                                                        method: 'POST',
-                                                        data: {
-                                                        'plugin_option_1': option1,
-                                                        'plugin_option_2': option2,
-                                                        'programmelab_store_banner': options
-                                                        },
-                                                    }).then(data => {
-                                                        alert('Options saved successfully!');
-                                                    });
-
-                                                    }}>{__('Save settings', 'store-banner')}
-                                                    </button>
-
+                                                    <Button isPrimary type="submit" className="button button-primary">
+                                                    {__('Save settings', 'store-banner')}
+                                                    </Button>
                                                 </div>
+                                            
+                                            </form>
                                         </>
                                         }
 
