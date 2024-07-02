@@ -18,7 +18,7 @@
  * Description:       Lorem Ipsum is simply dummy text of the printing and typesetting industry.
  * Version:           1.0.0
  * Author:            Programmelab
- * Author URI:        https://www.programmelab.com//
+ * Author URI:        https://www.programmelab.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       store-banner

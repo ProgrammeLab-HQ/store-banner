@@ -1,4 +1,3 @@
-import { __ } from '@wordpress/i18n';
 import { Button, Notice, TextControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import React from 'react';
@@ -163,7 +162,72 @@ const Settings = () => {
                 value={options._specific_product._banner_width}
                 onChange={(value) => updateField('_specific_product._banner_width', value)}
             />
+<div className="image-uploader-unit">
+                                                            <div className="title-wrap">
+                                                                <label>
+                                                                    <span>Banner Image</span>
+                                                                    <span className="hints-css hint--bottom" aria-label="Enable banner option for shop page."><i className="dashicons dashicons-editor-help"></i></span>
+                                                                </label>
+                                                            </div>
+                                                            <div className="position-relative store_banner_image">
+                                                                <div className="image-uploader">
+                                                                    <div
+                                                                        className={
+                                                                            [
+                                                                                'file-name',
+                                                                                options?._shop_page_banner_internal_image?.id ? 'with-close-button' : ''
+                                                                            ].join(" ")
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            options?._shop_page_banner_internal_image?.id ?
+                                                                            <>
+                                                                            <span className="gallery" data-fancybox="gallery-rand" data-src={options._shop_page_banner_internal_image.url}>
+                                                                                <img src={options._shop_page_banner_internal_image.thumbnail} className="option-image" />
+                                                                            </span>
+                                                                            <span 
+                                                                                className="store-banner-remove-image" 
+                                                                                data-base={noImageAvailable}
 
+                                                                                ></span>
+                                                                            </>
+                                                                            :
+                                                                            <span className="gallery">
+                                                                                <img src={noImageAvailable} className="option-image" />
+                                                                            </span>
+
+                                                                        }
+                                                                        
+                                                                        
+                                                                    </div>
+                                                                    <div className="file-detail">
+                                                                        <input
+                                                                            type="text"
+                                                                            className="url"
+                                                                            name="_shop_page_banner_internal_image.url"
+                                                                            value={options?._shop_page_banner_internal_image?.url || ''}
+                                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'url', event.target.value)}
+                                                                        />
+                                                                        <input
+                                                                            type="hidden"
+                                                                            className="thumbnail"
+                                                                            value={options._shop_page_banner_internal_image?.thumbnail || ''}
+                                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'thumbnail', event.target.value)}
+                                                                        />
+                                                                        <input
+                                                                            type="hidden"
+                                                                            className="id"
+                                                                            value={options._shop_page_banner_internal_image?.id || ''}
+                                                                            onChange={(event) => handleNestedOptionsChange('_shop_page_banner_internal_image', 'id', event.target.value)}
+                                                                        />
+                                                                        <div className="upload-help-text">
+                                                                            <p>Size: Optional <br /> File Support: .jpg, .jpeg, .gif, or .png.</p>
+                                                                        </div>
+                                                                        <button className="button button-primary image-uploader-button single-image-uploader-button">Upload Image</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
             <Button isPrimary type="submit">
                 Save Settings
             </Button>

@@ -6055,15 +6055,17 @@ function Settings(props) {
       }
     }, tempData);
     setOptions(tempData);
-    wp.apiFetch({
-      path: '/store_banner/v1/options',
-      method: 'POST',
-      data: {
-        'programmelab_store_banner': options
-      }
+    console.log(options);
+
+    /*wp.apiFetch({
+        path: '/store_banner/v1/options',
+        method: 'POST',
+        data: {
+            'programmelab_store_banner': options
+        },
     }).then(data => {
-      console.log('Options saved successfully!');
-    });
+        console.log('Options saved successfully!');
+    });*/
   };
   const handleSubmit = async event => {
     event.preventDefault();
@@ -6079,10 +6081,25 @@ function Settings(props) {
     });
   };
   const ALLOWED_MEDIA_TYPES = ['image'];
-  const handleSelect = media => {
+  const handleSelect = (path, media) => {
     //console.log('selected media:', media);
-    setMediaId(media.id);
-    setImage(media);
+    // setMediaId(media.id);
+    // setImage(media);
+    updateField(path + '.url', media.url);
+    updateField(path + '.thumbnail', media.sizes.thumbnail.url);
+    updateField(path + '.id', media.id);
+    // setImage('');
+  };
+  const onChangeMedia = (path, value) => {
+    console.log(1);
+    console.log(2);
+    console.log(3);
+    console.log(4);
+
+    // updateField(path + '.url', value.url);
+    // updateField(path + '.thumbnail', value.sizes.thumbnail.url);
+    // updateField(path + '.id', value.id);
+    // setImage('');
   };
   /*const onSelect = (media) => {
       setImage(media);
@@ -6179,14 +6196,10 @@ function Settings(props) {
   }, "Image Preview ", mediaId, " ", image?.url, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_bootstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
     src: options._shop_page._banner_internal_image.thumbnail
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__["default"], null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.MediaUpload, {
-    onSelect: handleSelect,
-    onChange: console.log(image),
-    onChange: image => {
-      updateField('_shop_page._banner_internal_image.url', image.url);
-      updateField('_shop_page._banner_internal_image.thumbnail', image.sizes.thumbnail.url);
-      updateField('_shop_page._banner_internal_image.id', image.id);
-      // setImage('');
-    },
+    onSelect: image => handleSelect('_shop_page._banner_internal_image', image)
+    // onChange={console.log(image)}
+    // onChange = {(image) => handleSelect('_shop_page._banner_internal_image', image)}
+    ,
     allowedTypes: ALLOWED_MEDIA_TYPES,
     value: mediaId,
     render: ({

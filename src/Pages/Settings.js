@@ -58,7 +58,9 @@ export default function Settings(props) {
 
         setOptions(tempData);
 
-        wp.apiFetch({
+        console.log(options);
+
+        /*wp.apiFetch({
             path: '/store_banner/v1/options',
             method: 'POST',
             data: {
@@ -66,7 +68,7 @@ export default function Settings(props) {
             },
         }).then(data => {
             console.log('Options saved successfully!');
-        });
+        });*/
     };
 
     const handleSubmit = async (event) => {
@@ -83,11 +85,26 @@ export default function Settings(props) {
         });
     };
     const ALLOWED_MEDIA_TYPES = ['image'];
-    const handleSelect = (media) => {
+    const handleSelect = (path, media) => {
         //console.log('selected media:', media);
-        setMediaId(media.id);
-        setImage(media);
+        // setMediaId(media.id);
+        // setImage(media);
+        updateField(path + '.url', media.url);
+        updateField(path + '.thumbnail', media.sizes.thumbnail.url);
+        updateField(path + '.id', media.id);
+        // setImage('');
     };
+    const onChangeMedia = (path, value) => {
+        console.log(1);
+        console.log(2);
+        console.log(3);
+        console.log(4);
+        
+        // updateField(path + '.url', value.url);
+        // updateField(path + '.thumbnail', value.sizes.thumbnail.url);
+        // updateField(path + '.id', value.id);
+        // setImage('');
+    }
     /*const onSelect = (media) => {
         setImage(media);
         if (onSelectImage) {
@@ -189,14 +206,9 @@ export default function Settings(props) {
                                                                 </Col>
                                                                 <Col>
                                                                 <MediaUpload
-                                                                    onSelect={handleSelect}
-                                                                    onChange={console.log(image)}
-                                                                    onChange = {(image) => {
-                                                                        updateField('_shop_page._banner_internal_image.url', image.url)
-                                                                        updateField('_shop_page._banner_internal_image.thumbnail', image.sizes.thumbnail.url)
-                                                                        updateField('_shop_page._banner_internal_image.id', image.id)
-                                                                        // setImage('');
-                                                                    }}
+                                                                    onSelect={(image) => handleSelect('_shop_page._banner_internal_image', image)}
+                                                                    // onChange={console.log(image)}
+                                                                    // onChange = {(image) => handleSelect('_shop_page._banner_internal_image', image)}
                                                                     allowedTypes={ALLOWED_MEDIA_TYPES}
                                                                     value={mediaId}
                                                                     render={({ open }) => (
