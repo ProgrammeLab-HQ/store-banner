@@ -128,11 +128,6 @@ class Store_Banner_Admin
 				true
 			);
 		}
-
-
-
-
-
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/store-banner-admin.js', array('jquery'), $this->version, false);
 
 		$ajax_params = array(
@@ -308,8 +303,8 @@ class Store_Banner_Admin
 		 * 
 		 */
 		$settings_link = array(
-			'<a href="' . admin_url('admin.php?page=' . $this->plugin_name) . '">' . esc_html__('Welcome', 'upgrade-store') . '</a>',
-			'<a href="' . admin_url('admin.php?page=' . $this->plugin_name . '-settings') . '">' . esc_html__('Settings', 'upgrade-store') . '</a>'
+			'<a href="' . admin_url('admin.php?page=' . $this->plugin_name) . '">' . esc_html__('Welcome', 'store-banner') . '</a>',
+			'<a href="' . admin_url('admin.php?page=' . $this->plugin_name . '-settings') . '">' . esc_html__('Settings', 'store-banner') . '</a>'
 		);
 		return array_merge($settings_link, $links);
 	}

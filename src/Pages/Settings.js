@@ -3,7 +3,7 @@
 // const useEffect = wp.element.useState;
 // const useState = wp.element.useState;
 // import Logo from '../assets/images/logo.svg';
-import { MediaUpload } from '@wordpress/block-editor';
+import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Button, Notice, SelectControl, TextControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -204,17 +204,47 @@ export default function Settings(props) {
                                                                     Image Preview {mediaId} {image?.url}
                                                                     <Image src={options._shop_page._banner_internal_image.thumbnail}/>
                                                                 </Col>
-                                                                <Col>
+                                                                <Col className='col-lg-6'>
+                                                                xxx
                                                                 <MediaUpload
-                                                                    onSelect={(image) => handleSelect('_shop_page._banner_internal_image', image)}
-                                                                    // onChange={console.log(image)}
-                                                                    // onChange = {(image) => handleSelect('_shop_page._banner_internal_image', image)}
-                                                                    allowedTypes={ALLOWED_MEDIA_TYPES}
-                                                                    value={mediaId}
-                                                                    render={({ open }) => (
-                                                                        <Button onClick={open}>Open Media Library</Button>
-                                                                    )}
-                                                                />
+  onSelect={(media) => {
+    setAttributes({
+      downloadFile: {
+        title: media.title,
+        filename: media.filename,
+        url: media.url,
+      },
+    });
+  }}
+  multiple={false}
+  render={({ open }) => (
+    <>
+      <button onClick={open}>
+        {attributes.downloadFile === null
+          ? 'Upload'
+          : 'Upload new file'}
+      </button>
+      <p>
+        {attributes.downloadFile === null
+          ? ''
+          : '(' + attributes.downloadFile.title + ')'}
+      </p>
+    </>
+  )}
+/>
+
+                                                                    <MediaUploadCheck>
+                                                                        <MediaUpload
+                                                                            onSelect={ ( media ) =>
+                                                                                console.log( 'selected ' + media.length )
+                                                                            }
+                                                                            allowedTypes={ ALLOWED_MEDIA_TYPES }
+                                                                            value={ mediaId }
+                                                                            render={ ( { open } ) => (
+                                                                                <Button onClick={ open }>Open Media Library</Button>
+                                                                            ) }
+                                                                        />
+                                                                    </MediaUploadCheck>
                                                                 </Col>
                                                             </Row>
                                                             <Row>
